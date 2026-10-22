@@ -1,0 +1,200 @@
+{
+  "generated_at": "2026-10-22T00:39:15+0800",
+  "bifrost_binary": "E:\\桌面\\我的简历\\bifrost-gateway-lab\\tools\\bifrost-http.exe",
+  "bifrost_binary_bytes": 117577216,
+  "providers": {
+    "openai": "mock-A(:9001)",
+    "anthropic": "mock-B(:9002)"
+  },
+  "key_status": {
+    "openai": "success",
+    "anthropic": "success"
+  },
+  "checks": [
+    {
+      "case": "A",
+      "check": "HTTP 200",
+      "pass": true,
+      "expected": "200",
+      "actual": "200"
+    },
+    {
+      "case": "A",
+      "check": "内容来自 primary (mock-A)",
+      "pass": true,
+      "expected": "以 [mock-A] 开头",
+      "actual": "'[mock-A] req#1: case A'"
+    },
+    {
+      "case": "A",
+      "check": "A.served == 1",
+      "pass": true,
+      "expected": "1",
+      "actual": "1"
+    },
+    {
+      "case": "A",
+      "check": "A.failed == 0",
+      "pass": true,
+      "expected": "0",
+      "actual": "0"
+    },
+    {
+      "case": "A",
+      "check": "B.served == 0（备用未被调用）",
+      "pass": true,
+      "expected": "0",
+      "actual": "0"
+    },
+    {
+      "case": "A",
+      "check": "B.failed == 0",
+      "pass": true,
+      "expected": "0",
+      "actual": "0"
+    },
+    {
+      "case": "B",
+      "check": "HTTP 200（用户端无感知）",
+      "pass": true,
+      "expected": "200",
+      "actual": "200"
+    },
+    {
+      "case": "B",
+      "check": "内容来自备用 (mock-B)",
+      "pass": true,
+      "expected": "以 [mock-B] 开头",
+      "actual": "'[mock-B] req#1: case B fallback'"
+    },
+    {
+      "case": "B",
+      "check": "A.served == 1",
+      "pass": true,
+      "expected": "1",
+      "actual": "1"
+    },
+    {
+      "case": "B",
+      "check": "A.failed == 1（主确实失败了）",
+      "pass": true,
+      "expected": "1",
+      "actual": "1"
+    },
+    {
+      "case": "B",
+      "check": "B.served == 1（备用确实被调用）",
+      "pass": true,
+      "expected": "1",
+      "actual": "1"
+    },
+    {
+      "case": "B",
+      "check": "B.failed == 0",
+      "pass": true,
+      "expected": "0",
+      "actual": "0"
+    },
+    {
+      "case": "B",
+      "check": "routing_info.is_fallback == true（网关自证）",
+      "pass": true,
+      "expected": "True",
+      "actual": "True"
+    },
+    {
+      "case": "B",
+      "check": "routing_info.provider == anthropic",
+      "pass": true,
+      "expected": "anthropic",
+      "actual": "anthropic"
+    },
+    {
+      "case": "B",
+      "check": "routing_info.primary_provider == openai（保留原始 provider）",
+      "pass": true,
+      "expected": "openai",
+      "actual": "openai"
+    },
+    {
+      "case": "C",
+      "check": "HTTP 500",
+      "pass": true,
+      "expected": "500",
+      "actual": "500"
+    },
+    {
+      "case": "C",
+      "check": "错误消息来自 primary（mock-A），不是 B 的 503",
+      "pass": true,
+      "expected": "含 'injected failure from mock-A'",
+      "actual": "{\"is_bifrost_error\": false, \"status_code\": 500, \"error\": {\"type\": \"injected_failure\", \"message\": \"injected failure from mock-A\"}, \"extra_fields\": {\"routing_info\": {\"provider\": \"openai\", \"model\": \"mock"
+    },
+    {
+      "case": "C",
+      "check": "routing_info.provider 回落为 primary",
+      "pass": true,
+      "expected": "openai",
+      "actual": "openai"
+    },
+    {
+      "case": "D",
+      "check": "A.served == 1（慢请求确实抵达主 provider）",
+      "pass": true,
+      "expected": "1",
+      "actual": "1"
+    },
+    {
+      "case": "D",
+      "check": "A.failed == 0（它是慢，不是失败）",
+      "pass": true,
+      "expected": "0",
+      "actual": "0"
+    },
+    {
+      "case": "D",
+      "check": "B.served == 0（取消阻断了 fallback）",
+      "pass": true,
+      "expected": "0",
+      "actual": "0"
+    },
+    {
+      "case": "E",
+      "check": "HTTP 200",
+      "pass": true,
+      "expected": "HTTP/1.1 200",
+      "actual": "HTTP/1.1 200 OK\r\nSer"
+    },
+    {
+      "case": "E",
+      "check": "流式内容来自 mock-B",
+      "pass": true,
+      "expected": "含 [mock-B]",
+      "actual": "找到"
+    },
+    {
+      "case": "E",
+      "check": "每个 chunk 带 is_fallback:true",
+      "pass": true,
+      "expected": "含 is_fallback:true",
+      "actual": "找到"
+    },
+    {
+      "case": "E",
+      "check": "带 primary_provider 元数据",
+      "pass": true,
+      "expected": "primary_provider=openai",
+      "actual": "找到"
+    },
+    {
+      "case": "E",
+      "check": "B.served == 1（真实打到备用）",
+      "pass": true,
+      "expected": "1",
+      "actual": "1"
+    }
+  ],
+  "passed": 26,
+  "total": 26,
+  "all_passed": true
+}

@@ -1,0 +1,13 @@
+# 网关二进制：112MB，不入库。用 scripts/download_bifrost.py 获取
+tools/*.exe
+
+# 运行期数据：SQLite 配置库 / 日志 / 临时目录
+tools/appdata*/
+tools/tmp/
+
+# Python
+__pycache__/
+*.py[cod]
+
+# 运行日志
+*.log
