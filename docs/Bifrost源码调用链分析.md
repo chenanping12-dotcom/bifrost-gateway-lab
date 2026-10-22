@@ -222,6 +222,8 @@ func WeightedRandom(ctx, keys []schemas.Key, providerKey, model) (schemas.Key, e
   具体原因需要读 `handlers/governance.go`（191 KB）才能定位。  
   可能与我 mock provider 缺 `/v1/models` 导致 key 状态为 `list_models_failed` 有关——**这是猜测，未验证**。
 
+> **2026-09-07 更正**：该绑定链路已打通——根因是测试脚本把字段写成了 `keys` / `allow_all_keys`（正确为 `key_ids`），**并非项目缺陷**；同时 v2 mock 补上 `/v1/models` 后 key 状态由 `list_models_failed` 变为 `success`，印证了上面的猜测。详见 `BIFROST_NEXT_TASKS.md` 第二节与第六节。
+
 **API 端点清单（实测可用）**：
 
 ```
@@ -261,9 +263,9 @@ core/bifrost.go:5072  validateRequestAfterPreRequestHooks(req)
 
 ## 六、未完成与待验证（诚实清单）
 
-- [ ] **跨 provider 的真实 fallback 实验**：没做成。没找到第二个可用的 OpenAI 兼容 provider 类型  
-  （`openai-compatible` 创建被接受但实际 unsupported）。需要接 Anthropic 或真实 Ollama。
-- [ ] **虚拟 Key → provider key 绑定**：未打通，见第四节。
+- [x] **跨 provider 的真实 fallback 实验**：**已于 2026-09-07 完成**（Case A/B/C/D 全部 PASS，含 `openai`→`anthropic` 跨 provider fallback 与请求取消不触发 fallback），见 `fallback验证报告.md`。  
+  （本文写于 2026-09-06，当时确实没做成：没找到第二个可用的 OpenAI 兼容 provider 类型——`openai-compatible` 创建被接受但实际 unsupported。）
+- [x] **虚拟 Key → provider key 绑定**：**已打通**（根因是测试脚本字段用错：应为 `key_ids` 而非 `keys`，非项目 bug），见 `BIFROST_NEXT_TASKS.md` 第二节。
 - [ ] **语义缓存验证**：`RunLLMPreHooks` 短路机制读到了，但没实际配置缓存跑一遍。
 - [ ] **流式内部实现**：`handleStreamRequest`（5175）没细读，goroutine 回收机制未确认。
 - [ ] **Token 计量**：流式下 usage 只在最后一个 chunk（我 mock 就是这么造的），  

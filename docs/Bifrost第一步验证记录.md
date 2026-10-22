@@ -29,7 +29,7 @@
 |---|---|---|
 | Node.js | v22.22.2（已有） | 可用 |
 | Docker | **未安装** | 官方 `docker run` 路线暂时走不了 |
-| Go | **未安装** | 无法从源码 `go build` |
+| Go | **未安装**（2026-09-07 已装 go1.26.8，见 `BIFROST_NEXT_TASKS.md`） | 无法从源码 `go build`（当时） |
 | Ollama | **未安装** | 无法用本地真实模型 |
 | WSL2 | 已安装但**虚拟化在 BIOS 被禁用** | **WSL2 + Ubuntu 路线走不通**，需进 BIOS 开启 |
 
@@ -228,7 +228,7 @@ python mock_provider.py 9002 mock-B 0
 **待补（不急，按需）**：
 - Ollama：想在本地跑真实模型时装（比 mock 更真实，但要多下几百 MB + 模型）
 - Docker：Phase 4/5 要上 Prometheus/Grafana 时再装
-- Go 工具链：Phase 2 读源码 + Phase 4 二次开发前必须装
+- Go 工具链：**已于 2026-09-07 安装 go1.26.8**（见 `BIFROST_NEXT_TASKS.md` 第零节）
 
 **未验证、不要写进简历**：官方自称的 11 µs 开销 / 5000 RPS——本文没有测性能，
 Phase 5 用 mock provider 自测后再填。

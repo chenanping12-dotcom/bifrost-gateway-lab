@@ -32,6 +32,10 @@ python scripts/verify_fallback.py      # 26/26  端到端跑真实 Bifrost
 | **D** | 客户端中途取消 | 备用**不被调用** | `A.served=1, A.failed=0`，`B.served=0` |
 | **E** | 流式 + fallback | SSE 每个 chunk 都带 `is_fallback` 与 `primary_provider` | 流式内容来自 `mock-B`，`B.served=1` |
 
+> **字母消歧（2026-10-22 补）** ：本表的 **Case E** 指「流式 + fallback」这一组实验（脚本 `scripts/verify_fallback.py`）。
+> `docs/fallback验证报告.md` 里另有一个 **Case E**，指的是 `AllowFallbacks=false`（源码级 PASS / 端到端 UNVERIFIED），
+> 两者字母相同但**不是同一组实验**，引用时请写清来源，不要互相替代。
+
 其中 **Case D 的构造是整组实验里最讲究的一处**：让 primary 变**慢**（3000ms）而不是变**失败**，
 客户端 1 秒后断开。因为 primary 是「慢」而非「成功」，备用不被调用就**只能**解释为「取消阻断了
 fallback」——排除了所有替代解释。
@@ -83,7 +87,7 @@ bifrost-gateway-lab/
 │   ├── download_bifrost.py       可续传下载 + 字节数校验
 │   ├── verify_contract.py        mock 契约自测（29 项，不需要网关）
 │   └── verify_fallback.py        端到端 fallback 矩阵（26 项，真实 Bifrost）
-├── docs/                         当时的原始报告（历史记录，未改动）
+├── docs/                         当时的原始报告（历史记录，仅在被推翻处加日期更正标注）
 │   ├── Bifrost源码调用链分析.md
 │   ├── Bifrost第一步验证记录.md
 │   ├── fallback验证报告.md
@@ -95,7 +99,7 @@ bifrost-gateway-lab/
 └── tools/                        (gitignore) 网关二进制 + 运行期数据
 ```
 
-`docs/` 是**当时写的历史记录**，保留原样；`scripts/` + `reports/` 是**今天可重跑的复现装置**。
+`docs/` 是**当时写的历史记录**，正文保留原样，只在被后续证据推翻的结论旁加了带日期的更正标注；`scripts/` + `reports/` 是**今天可重跑的复现装置**。
 两者并存，是因为历史报告记录的是「当时怎么想的」，而脚本证明的是「结论现在仍然成立」。
 
 ---
